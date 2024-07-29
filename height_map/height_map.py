@@ -28,16 +28,19 @@ class HeightMap(object):
         Get height map around the pose
         """
         x = np.arange(
-            pose.x - self.x_length / 2, pose.x + self.x_length / 2, self.step_size
+            - self.x_length / 2, self.x_length / 2 + self.step_size, self.step_size
         )
         y = np.arange(
-            pose.y - self.y_length / 2, pose.y + self.y_length / 2, self.step_size
+            - self.y_length / 2, self.y_length / 2 + self.step_size, self.step_size
         )
         X, Y = np.meshgrid(x, y)
 
         # rotate the meshgrid by angle of yaw
         X_rot = X * np.cos(pose.yaw) - Y * np.sin(pose.yaw)
         Y_rot = X * np.sin(pose.yaw) + Y * np.cos(pose.yaw)
+
+        X_rot += pose.x
+        Y_rot += pose.y
 
         Z = np.zeros(X_rot.shape)
 
